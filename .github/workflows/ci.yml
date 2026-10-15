@@ -18,7 +18,7 @@ jobs:
         shell: ${{ matrix.shell }}
     steps:
       - uses: actions/checkout@v4
-      - name: Install Pester 6.2.0
+      - name: Install tooling
         run: |
           [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
           if (-not (Get-PackageSource -Name PSGallery -ErrorAction SilentlyContinue)) { Register-PSRepository -Default }
@@ -27,11 +27,6 @@ jobs:
             Install-PackageProvider -Name NuGet -Force -Scope CurrentUser | Out-Null
           }
           Install-Module -Name Pester -MinimumVersion 6.2.0 -MaximumVersion 6.2.99 -Force -SkipPublisherCheck -Scope CurrentUser
-      - name: Run tests
-        run: |
-          Import-Module Pester -MinimumVersion 6.2.0
-          $config = New-PesterConfiguration
-          $config.Run.Path = './Tests'
-          $config.Run.Exit = $true
-          $config.Output.Verbosity = 'Detailed'
-          Invoke-Pester -Configuration $config
+          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
+      - name: Run tests + coverage gate + analyzer
+        run: ./scripts/Invoke-Tests.ps1
