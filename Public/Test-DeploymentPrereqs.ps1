@@ -6,5 +6,8 @@ function Test-DeploymentPrereqs {
         [uri]$HealthUrl,
         [string]$StateRoot
     )
-    throw 'Test-DeploymentPrereqs: not implemented (Task 3)'
+    Test-Prereqs -SourcePath (Resolve-DeployPath -Path $SourcePath) `
+        -TargetPath (Resolve-DeployPath -Path $TargetPath) `
+        -HealthUrl $HealthUrl `
+        -StateRoot $StateRoot
 }
