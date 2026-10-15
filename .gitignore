@@ -1,0 +1,9 @@
+# Pester outputs
+coverage.xml
+TestResults.xml
+
+# IDE / OS
+.vs/
+*.user
+Thumbs.db
+.DS_Store
