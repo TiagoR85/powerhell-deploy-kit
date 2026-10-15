@@ -27,12 +27,12 @@ function Test-StateRootWritable {
     $created = $false
     try {
         if (-not (Test-Path -LiteralPath $probeDir)) {
-            New-Item -ItemType Directory -Path $probeDir -Force -ErrorAction Stop | Out-Null
+            New-Item -ItemType Directory -Path $probeDir -Force -ErrorAction Stop -WhatIf:$false -Confirm:$false | Out-Null
             $created = $true
         }
         $probe = Join-Path $probeDir '.probe'
-        Set-Content -LiteralPath $probe -Value 'ok' -Encoding ASCII -ErrorAction Stop
-        Remove-Item -LiteralPath $probe -Force -ErrorAction Stop
+        Set-Content -LiteralPath $probe -Value 'ok' -Encoding ASCII -ErrorAction Stop -WhatIf:$false -Confirm:$false
+        Remove-Item -LiteralPath $probe -Force -ErrorAction Stop -WhatIf:$false -Confirm:$false
         return $true
     }
     catch {
@@ -40,7 +40,7 @@ function Test-StateRootWritable {
     }
     finally {
         if ($created) {
-            Remove-Item -LiteralPath $probeDir -Recurse -Force -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $probeDir -Recurse -Force -ErrorAction SilentlyContinue -WhatIf:$false -Confirm:$false
         }
     }
 }
