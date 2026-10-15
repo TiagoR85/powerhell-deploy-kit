@@ -37,12 +37,15 @@ $target = '.\demo-app'
 $src = '.\demo-src'
 New-Item -ItemType Directory -Path $src -Force | Out-Null
 Set-Content -Path (Join-Path $src 'index.html') -Value '<h1>v1</h1>'
+# Seed the target so the deploy takes a backup (undo restores the previous content).
+New-Item -ItemType Directory -Path $target -Force | Out-Null
+Set-Content -Path (Join-Path $target 'index.html') -Value '<h1>v0</h1>'
 
 Test-DeploymentPrereqs -SourcePath $src -TargetPath $target   # .Passed / .Failures
 Invoke-Deploy -SourcePath $src -TargetPath $target            # -WhatIf supported
 Invoke-Deploy -SourcePath $src -TargetPath $target -HealthUrl http://127.0.0.1:8080/health
 Get-DeployHistory -TargetPath $target -Last 5
-Undo-LastDeployment -TargetPath $target
+Undo-LastDeployment -TargetPath $target                       # back to v0
 ```
 
 ## Commands
